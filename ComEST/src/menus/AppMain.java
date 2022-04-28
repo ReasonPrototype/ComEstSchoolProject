@@ -1,6 +1,9 @@
 package menus;
 
 import sistema.ComEST;
+
+import java.util.ArrayList;
+
 import restaurante.Opcao;
 import restaurante.Prato;
 import restaurante.Restaurante;
@@ -12,6 +15,35 @@ public class AppMain {
 	 */
 	public static void main( String []args ){
 		ComEST come = new ComEST();
+		
+		ArrayList<Restaurante> restaurantes = new ArrayList<Restaurante>();
+		Restaurante r1 = new Restaurante();
+		r1.setName("CantinaEST");
+		r1.setDesc("Comida caseira, elaborada com um toque de requinte.");
+		ArrayList<Prato> r1Pratos = new ArrayList<Prato>();
+		
+		Prato r1Rissois = new Prato();
+		r1Rissois.setName("Rissois");
+		r1Rissois.setDesc("3 Rissois de bacalhau acompanhados de arroz");
+		r1Rissois.setPrice(2.6f);
+		r1Rissois.setWeight(300);
+		
+		ArrayList<Opcao> opcoesRissois = new ArrayList<Opcao>();
+		Opcao rissolOpt1 = new Opcao();
+		rissolOpt1.setName("Acompanhado com arroz de tomate");
+		rissolOpt1.setPrice(0.3f);
+		rissolOpt1.setWeight(30);
+		
+		opcoesRissois.add(rissolOpt1);
+		r1Rissois.setOptions(opcoesRissois);
+		
+		r1Pratos.add(r1Rissois);
+		r1.setPratos(r1Pratos);
+		
+		// TODO Adiciona todos Alex
+		restaurantes.add(r1);
+		
+		come.setRestaurantes(restaurantes);
 		/**
 		 * Criar aqui os restaurantes/pratos/opções
 		 * Criar aqui os restaurantes/pratos/opções

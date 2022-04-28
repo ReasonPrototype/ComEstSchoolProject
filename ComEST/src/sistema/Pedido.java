@@ -60,6 +60,11 @@ public class Pedido {
 		return total;
 	}
 	
+	public float getPrecoPratos() {
+		return this.getPrice() + this.calcularTaxa();
+	}
+	
+	
 	public int getTotalWeight() {
 		int total = 0;
 		

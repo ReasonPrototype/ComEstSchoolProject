@@ -53,4 +53,5 @@ public class Restaurante {
 	public boolean temPrato( Prato p ) {
 		return this.pratos.contains(p);
 	}
+
 }

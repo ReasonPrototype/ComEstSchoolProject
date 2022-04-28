@@ -1,7 +1,10 @@
 package sistema;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map.Entry;
+import java.util.Optional;
 
 import restaurante.Restaurante;
 
@@ -37,6 +40,23 @@ public class ComEST {
 		return total;
 	}
 	
+	// Utiliza a interface Optional para ser seguro utilizar sem ter null exception
+	public Optional<String> getCodigoPedido( Pedido p ){
+		for(Entry<String, Pedido> entry: this.pedidos.entrySet()) {
+			if (entry.getValue().equals(p)) {
+				return Optional.of(entry.getKey());
+			}
+		}
+	    
+		return Optional.empty();
+	}
 	
+	public Pedido getPedidoByCode(String code) {
+		return this.pedidos.get(code);
+	}
+	
+	public Collection<Pedido> getTodosPedidos(){
+		return this.pedidos.values();
+	}
 	
 }

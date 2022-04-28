@@ -1,6 +1,7 @@
 package menus;
 
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -63,8 +64,8 @@ public class MenuServidor {
 	 * 
 	 */
 	private void verTodosPedidos() {
-		// TODO passar os pedidos de todo o sistema
-		verPedidos( null );		
+		// FEITO passar os pedidos de todo o sistema
+		verPedidos( this.server.getTodosPedidos() );		
 	}
 
 	/** Apresenta todos os pedidos presentes na lista
@@ -73,12 +74,12 @@ public class MenuServidor {
 	private void verPedidos( Collection<Pedido> pedidos ) {
 		consola.clear();
 		for( Pedido p : pedidos ) {
-			// TODO preencher a informação corretamente
-			String codigo = "Código do pedido";
-			String nomeRest = "Nome de um restaurante";
-			int peso = 500;
-			float preco = 2.3f;
-			float taxa = 2.5f;
+			// FEITO preencher a informação corretamente
+			String codigo = this.server.getCodigoPedido(p).get();
+			String nomeRest = p.getRestaurante().getName();
+			int peso = p.getTotalWeight();
+			float preco = p.getPrice();
+			float taxa = p.calcularTaxa();
 			consola.println( String.format("%6s - %-30s  %4dg  %6.2fe  %6.2f€",
 					codigo, nomeRest,  peso,
 					preco, taxa) );
@@ -86,8 +87,8 @@ public class MenuServidor {
 		consola.print("\nDeseja ver algum pedido em detalhe?\nInsira o código: ");
 		String cod = consola.readLine();
 		if( cod.length() == 6) {
-			// TODO visualizar o pedido se houver código
-			verPedido( null );
+			// FEITO visualizar o pedido se houver código
+			verPedido( this.server.getPedidoByCode(cod) );
 		}
 	}
 
@@ -96,19 +97,26 @@ public class MenuServidor {
 	 */
 	private void verPedidosRestaurante() {
 		consola.clear();		
-		// TODO apresentar a info dos restaurantes
-		for( int i = 0; i < 1; i++  ) {
-			String nomeRest = "Nome de um restaurante";
+		for(int i = 0; i < this.server.getRestaurantes().size(); i++) {
+			Restaurante r = this.server.getRestaurantes().get(i);
+			String nomeRest = r.getName();
 			consola.println( (i+1) + ": " + nomeRest );
 		}
+
 		consola.print( "\nRestaurante: " );
 		int ridx = consola.readInt() - 1;
-		// TODO verificar se o vaor introduzido é válido
-		if( Math.abs( 2 ) == -2 )
+		// FEITO verificar se o vaor introduzido é válido
+		if( ridx < 0 || ridx >= this.server.getRestaurantes().size() )
 			return;
 		
-		// TODO listar os pedidos do restaurante
-		verPedidos( null );
+		ArrayList<Pedido> pedidos = new ArrayList<Pedido>();
+		for(Restaurante r: this.server.getRestaurantes()) {
+			for(Pedido p: r.getPedidos()) {
+				pedidos.add(p);
+			}
+		}
+		// FEITO listar os pedidos do restaurante
+		verPedidos( pedidos );
 	}
 
 	/** Lista as informações do pedido
@@ -122,30 +130,32 @@ public class MenuServidor {
 		}
 		
 		consola.clear();
-		// TODO apresentar as infos corretas
-		String codigo = "codeXX";
-		String nomeRest= "Nome de um restaurante";
-		float precoTotal = 5.1f;
-		float precoPratos = 2.6f;
-		float custoEntrega = 2.5f;
-		int peso = 1000;
+		// FEITO apresentar as infos corretas
+		String codigo = this.server.getCodigoPedido(p).get();
+		String nomeRest = p.getRestaurante().getName();
+		float precoTotal = p.getPrice();
+		float precoPratos = p.getPrecoPratos();
+		float custoEntrega = p.calcularTaxa();
+		int peso = p.getTotalWeight();
 		consola.println( "Pedido " + codigo + "\nRestaurante:" + nomeRest +"\n");
 		consola.println( String.format( "Preço        : %6.2f€", precoTotal ) ); 
 		consola.println( String.format( "Preço  pratos: %6.2f€", precoPratos ) );  
 		consola.println( String.format( "Custo entrega: %6.2f€  (%4dg)", custoEntrega, peso ) );
 		
-		for( int i = 0; i < 1; i++ ) {
-			String nomePrato = "Nome do prato";
-			float precoPrato = 2.5f;
-			int pesoPrato = 800;
+		for(Escolha e: p.getEscolhas()) {
+			String nomePrato = e.getPrato().getName();
+			float precoPrato = e.getPrato().getPrice();
+			int pesoPrato = e.getPrato().getWeight();
 			consola.println( String.format( "%-40s  %6.2f€  %4dg", nomePrato, precoPrato, peso ));
-			for( int k=0; k < 1; k++ ) {
-				String nomeOpcao = "Opção do prato";
-				float custoOpcao = 0.3f;
-				int pesoOpcao = 200;
+			for(Opcao o: e.getPrato().getOptions()) {
+				String nomeOpcao = o.getName();
+				float custoOpcao = o.getPrice();
+				int pesoOpcao = o.getWeight();
 				consola.println( String.format("     %-35s  %6.2f€  %4dg", nomeOpcao, custoOpcao, pesoOpcao ) );
 			}
+			
 		}
+		
 		consola.readLine();
 	
 	}

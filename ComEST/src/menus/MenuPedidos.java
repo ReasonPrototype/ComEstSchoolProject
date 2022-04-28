@@ -86,10 +86,10 @@ public class MenuPedidos {
 			printPratos( r.getPratos() );
 			consola.print("\nPrato: ");
 			pidx = consola.readInt() ;
-			// TODO se o índice escolhido for válido, apresentar o prato
-			if( Math.abs(2 ) == 2 ) {
-				// TODO se o índice é válido, apresentar o prato e respetivas opções 
-				escolherOpcoesPrato( null, null );
+			// FEITO se o índice escolhido for válido, apresentar o prato
+			if( pidx < 0 || pidx >= r.getPratos().size()) {
+				// FEITO se o índice é válido, apresentar o prato e respetivas opções 
+				escolherOpcoesPrato( p, r.getPratos().get(pidx) );
 			}
 		} while( pidx != 0 && pidx != -1 );
 
@@ -115,14 +115,21 @@ public class MenuPedidos {
 	private void printEscolhas(List<Escolha> escolhas) {
 		if( escolhas.size() == 0 )
 			consola.println( "<Ainda sem pratos no pedido>" );
-		// TODO para cada escolha imprimir
-		String nomePrato ="Nome do prato";
-		float precoPrato = 2.5f;
-		consola.println( String.format("%-40s %6.2f€", nomePrato, precoPrato ) );
-		// TODO para cada opção do prato imprimir
-		String nomeOpcao = "nome da opção";
-		float custoOpcao = 0.3f;
-		consola.println( String.format("     %-35s %6.2f€", nomeOpcao, custoOpcao ) );
+		
+		for(Escolha e: escolhas) {
+			// FEITO para cada escolha imprimir
+			String nomePrato = e.getPrato().getName();
+			float precoPrato = e.getPreco();
+			consola.println( String.format("%-40s %6.2f€", nomePrato, precoPrato ) );	
+			
+			for(Opcao o: e.getPrato().getOptions()) {
+				// FEITO para cada opção do prato imprimir
+				String nomeOpcao = o.getName();
+				float custoOpcao = o.getPrice();
+				consola.println( String.format("     %-35s %6.2f€", nomeOpcao, custoOpcao ) );
+			}
+		}
+		
 	}
 	
 	/** apresenta, na consola, uma lista de pratos
@@ -131,10 +138,10 @@ public class MenuPedidos {
 	private void printPratos(List<Prato> pratos) {
 		if( pratos.size() == 0 )
 			consola.println( "<Sem pratos>" );
-		// TODO para cada prato imprimir a informação solicitada
+		// FEITO para cada prato imprimir a informação solicitada
 		for( int i = 0; i < pratos.size(); i++ ) {
-			String nome = "nome prato";
-			float preco = 2.5f;
+			String nome = pratos.get(i).getName();
+			float preco = pratos.get(i).getPrice();
 			consola.println( String.format("%2d:%-40s %6.2f€", i+1, nome, preco ) );
 		}
 	}
